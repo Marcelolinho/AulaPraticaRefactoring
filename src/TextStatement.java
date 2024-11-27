@@ -2,21 +2,41 @@ package src;
 
 public class TextStatement extends Statement {
     public String value(Customer aCustomer) {
+        StringBuilder result = new StringBuilder();
+
+        appendHeader(result, aCustomer);
+
+        appendRentalDetails(result, aCustomer);
+
+        appendFooter(result, aCustomer);
+
+        return result.toString();
+    }
+
+    private void appendHeader(StringBuilder result, Customer aCustomer) {
+        result.append("Rental Record for ")
+                .append(aCustomer.getName())
+                .append("\n");
+    }
+
+    private void appendRentalDetails(StringBuilder result, Customer aCustomer) {
         Enumeration rentals = aCustomer.getRentals();
-        String result = "Rental Record for " + aCustomer.getName() +
-                "\n";
         while (rentals.hasMoreElements()) {
             Rental each = (Rental) rentals.nextElement();
-            //show figures for this rental
-            result += "\t" + each.getMovie().getTitle()+ "\t" +
-                    String.valueOf(each.getCharge()) + "\n";
+            result.append("\t")
+                    .append(each.getMovie().getTitle())
+                    .append("\t")
+                    .append(each.getCharge())
+                    .append("\n");
         }
-        //add footer lines
-        result += "Amount owed is " +
-                String.valueOf(aCustomer.getTotalCharge()) + "\n";
-        result += "You earned " +
-                String.valueOf(aCustomer.getTotalFrequentRenterPoints()) +
-                " frequent renter points";
-        return result;
+    }
+
+    private void appendFooter(StringBuilder result, Customer aCustomer) {
+        result.append("Amount owed is ")
+                .append(aCustomer.getTotalCharge())
+                .append("\n")
+                .append("You earned ")
+                .append(aCustomer.getTotalFrequentRenterPoints())
+                .append(" frequent renter points");
     }
 }

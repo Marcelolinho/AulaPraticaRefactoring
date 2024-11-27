@@ -2,21 +2,40 @@ package src;
 
 public class HtmlStatement extends Statement {
     public String value(Customer aCustomer) {
+        StringBuilder result = new StringBuilder();
+
+        appendHeader(result, aCustomer);
+
+        appendRentalDetails(result, aCustomer);
+
+        appendFooter(result, aCustomer);
+
+        return result.toString();
+    }
+
+    private void appendHeader(StringBuilder result, Customer aCustomer) {
+        result.append("<H1>Rentals for <EM>")
+                .append(aCustomer.getName())
+                .append("</EM></H1><P>\n");
+    }
+
+    private void appendRentalDetails(StringBuilder result, Customer aCustomer) {
         Enumeration rentals = aCustomer.getRentals();
-        String result = "<H1>Rentals for <EM>" + aCustomer.getName() +
-                "</EM></H1><P>\n";
         while (rentals.hasMoreElements()) {
             Rental each = (Rental) rentals.nextElement();
-            //show figures for each rental
-            result += each.getMovie().getTitle()+ ": " +
-                    String.valueOf(each.getCharge()) + "<BR>\n";
+            result.append(each.getMovie().getTitle())
+                    .append(": ")
+                    .append(each.getCharge())
+                    .append("<BR>\n");
         }
-        //add footer lines
-        result += "<P>You owe <EM>" +
-                String.valueOf(aCustomer.getTotalCharge()) + "</EM><P>\n";
-        result += "On this rental you earned <EM>" +
-                String.valueOf(aCustomer.getTotalFrequentRenterPoints()) +
-                "</EM> frequent renter points<P>";
-        return result;
+    }
+
+    private void appendFooter(StringBuilder result, Customer aCustomer) {
+        result.append("<P>You owe <EM>")
+                .append(aCustomer.getTotalCharge())
+                .append("</EM><P>\n")
+                .append("On this rental you earned <EM>")
+                .append(aCustomer.getTotalFrequentRenterPoints())
+                .append("</EM> frequent renter points<P>");
     }
 }
